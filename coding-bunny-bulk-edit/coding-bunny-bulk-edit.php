@@ -3,7 +3,7 @@
 /**
  * Plugin Name: CodingBunny Bulk Edit for WooCommerce
  * Description: Quickly edit your e-commerce products.
- * Version:     2.2.0
+ * Version:     2.2.1
  * Requires at least: 6.0
  * Requires PHP: 8.0
  * Author:      CodingBunny
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CBBE_VERSION', '2.2.0' );
+define( 'CBBE_VERSION', '2.2.1' );
 define( 'CBBE_PLUGIN_FILE', __FILE__ );
 
 class CodingBunnyBulkEdit {

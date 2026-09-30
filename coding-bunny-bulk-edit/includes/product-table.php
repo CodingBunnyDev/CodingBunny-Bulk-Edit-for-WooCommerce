@@ -1271,21 +1271,35 @@ if ( strpos( $column_key, 'custom_field_' ) === 0 ) {
 
 		<div class="wrap cbbe-dashboard">
 			<h1 class="screen-reader-text">CodingBunny Bulk Edit for WooCommerce</h1>
+			<?php
+			$cbbe_logo_file   = dirname( __DIR__ ) . '/assets/images/logo.svg';
+			$cbbe_logo_url    = file_exists( $cbbe_logo_file ) ? plugins_url( 'assets/images/logo.svg', CBBE_PLUGIN_FILE ) : '';
+			$cbbe_sponsor_url = (string) apply_filters( 'cbbe_sponsor_url', 'https://github.com/sponsors/CodingBunnyDev' );
+			?>
 			<div class="cbbe-header">
-				<?php $logo_url = plugins_url( 'assets/images/logo.svg', dirname( __DIR__ ) . '/coding-bunny-bulk-edit.php' ); ?>
 				<div class="cbbe-header-left">
-					<img src="<?php echo esc_url( $logo_url ); ?>"
-					alt="<?php echo esc_attr__( 'CodingBunny logo', 'coding-bunny-bulk-edit' ); ?>"
-					class="cbbe-logo" />
+					<?php if ( '' !== $cbbe_logo_url ) : ?>
+						<img src="<?php echo esc_url( $cbbe_logo_url ); ?>"
+							alt="<?php echo esc_attr__( 'CodingBunny logo', 'coding-bunny-bulk-edit' ); ?>"
+							class="cbbe-logo" />
+					<?php else : ?>
+						<div class="cbbe-logo-fallback"><?php esc_html_e( 'CodingBunny', 'coding-bunny-bulk-edit' ); ?></div>
+					<?php endif; ?>
 					<div class="cbbe-title">
 						<p>
 							<?php esc_html_e( 'CodingBunny Bulk Edit for WooCommerce', 'coding-bunny-bulk-edit' ); ?>
-							<span class="cbbe-version">
-								v<?php echo defined( 'CBBE_VERSION' ) ? esc_html( CBBE_VERSION ) : ''; ?>
-							</span>
+							<span class="cbbe-version">v<?php echo esc_html( CBBE_VERSION ); ?></span>
 						</p>
 					</div>
 				</div>
+				<?php if ( '' !== $cbbe_sponsor_url ) : ?>
+					<div class="cbbe-header-right">
+						<a class="cbbe-sponsor-link" href="<?php echo esc_url( $cbbe_sponsor_url ); ?>" target="_blank" rel="noopener">
+							<span class="dashicons dashicons-heart" aria-hidden="true"></span>
+							<?php esc_html_e( 'Love this plugin? Support the development', 'coding-bunny-bulk-edit' ); ?>
+						</a>
+					</div>
+				<?php endif; ?>
 			</div>
 
 			<?php cbbe_render_add_product_modal(); ?>
@@ -1320,7 +1334,7 @@ if ( strpos( $column_key, 'custom_field_' ) === 0 ) {
 			echo esc_html__('Delete', 'coding-bunny-bulk-edit');
 			echo '</button>';
 
-			echo esc_html__(' ❖ ', 'coding-bunny-bulk-edit');
+			echo '<span class="cbbe-toolbar-sep" aria-hidden="true"></span>';
 
 			echo '<button type="button" id="open-filter-modal" class="button-secondary" title="' . esc_attr__('Search and filter products', 'coding-bunny-bulk-edit') . '">';
 			echo '<span class="dashicons dashicons-search"></span>';
@@ -1342,7 +1356,7 @@ if ( strpos( $column_key, 'custom_field_' ) === 0 ) {
 			echo esc_html__('Show Variations', 'coding-bunny-bulk-edit');
 			echo '</button>';
 
-			echo esc_html__(' ❖ ', 'coding-bunny-bulk-edit');
+			echo '<span class="cbbe-toolbar-sep" aria-hidden="true"></span>';
 
 			echo '<button type="submit" name="update_products" class="button button-primary">';
 			echo '<span class="dashicons dashicons-database-view"></span> ';
@@ -1368,7 +1382,7 @@ if ( strpos( $column_key, 'custom_field_' ) === 0 ) {
 			echo '<input type="hidden" name="cbbe_update_pagination" value="1">';
 			echo '</form>';
 
-			echo esc_html__(' ❖ ', 'coding-bunny-bulk-edit');
+			echo '<span class="cbbe-toolbar-sep" aria-hidden="true"></span>';
 
 			echo '<button type="button" id="open-columns-modal" class="button-secondary" title="' . esc_html__('Manage columns', 'coding-bunny-bulk-edit') . '">';
 			echo '<span class="dashicons dashicons-admin-generic"></span>';
@@ -1642,11 +1656,11 @@ if ( strpos( $column_key, 'custom_field_' ) === 0 ) {
 						$order_by_url = add_query_arg('order_by', $order_by_next, $current_url);
 
 						echo '<th>';
-						echo '<a href="' . esc_url($order_by_url) . '" style="padding-left: 10px; text-decoration:none; color:inherit;">' . esc_html__('Product name', 'coding-bunny-bulk-edit');
+						echo '<a href="' . esc_url($order_by_url) . '" class="cbbe-sort-link">' . esc_html__('Product name', 'coding-bunny-bulk-edit');
 						if ($order_by_current === 'ASC') {
-							echo ' <span style="font-size:13px;">&#9650;</span>';
+							echo ' <span class="cbbe-sort-icon">&#9650;</span>';
 						} else {
-							echo ' <span style="font-size:13px;">&#9660;</span>';
+							echo ' <span class="cbbe-sort-icon">&#9660;</span>';
 						}
 						echo '</a>';
 						echo '</th>';
@@ -1909,7 +1923,7 @@ if ( strpos( $column_key, 'custom_field_' ) === 0 ) {
 										$variation_gallery_ids = cbbe_get_variation_gallery_ids($variation_id);
 										$variation_tax_class = $variation_product->get_tax_class() ?: 'standard';
 
-										echo '<tr class="cbbe-variation" data-parent-id="' . esc_attr($product_id) . '" style="display:none; background-color: #ebf9fd;">';
+										echo '<tr class="cbbe-variation" data-parent-id="' . esc_attr($product_id) . '" style="display:none;">';
 										echo '<td></td>';
 										echo '<td></td>';
 										echo '<td><input type="checkbox" class="product-checkbox" name="selected_products[]" value="' . esc_attr($variation_id) . '"></td>';
@@ -1933,7 +1947,7 @@ if ( strpos( $column_key, 'custom_field_' ) === 0 ) {
 					echo '<p>' . sprintf(esc_html__('%1d products found ', 'coding-bunny-bulk-edit'), esc_html($total_products)) . '</p>';
 					if ($total_pages > 1) {
 						$current_url = remove_query_arg('paged');
-						echo '<div class="cbbe-pagination" style="margin:16px 0;">';
+						echo '<div class="cbbe-pagination">';
 						if ($paged > 1) {
 							echo '<a class="page-numbers prev" href="' . esc_url(add_query_arg('paged', $paged - 1, $current_url)) . '">&laquo;</a> ';
 						}
